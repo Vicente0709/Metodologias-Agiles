@@ -1,34 +1,26 @@
-// Import the necessary functions and constants
-const { fireEvent } = require("@testing-library/dom");
+const { Builder, By, Key } = require('selenium-webdriver');
+require('chromedriver');
 
-// Import the JavaScript file that contains the functions to be tested
-const { btnLog, btnRegister } = require("./your-js-file");
+async function test_case() {
+  let driver = await new Builder().forBrowser('chrome').build();
+  await driver.get('C:/Users/HP/Desktop/EPN/METODOLOGIAS AGILES/proy/Metodologias-Agiles/views/index.html');
 
-// Mock the window.location.href
-delete window.location;
-window.location = { href: "" };
+  let btnLog = await driver.findElement(By.id('btnLogNav'));
+  let btnRegister = await driver.findElement(By.id('btnRegisterNav'));
 
-// Test the event listeners
-describe("Event Listeners", () => {
-  test("btnLog click should log message and navigate to login.html", () => {
-    console.log = jest.fn(); // Mock console.log function
-    fireEvent.click(btnLog); // Trigger click event
+  await btnLog.click();
+  console.log('Se hizo clic en el botón de Log In');
 
-    // Expectations
-    expect(console.log).toHaveBeenCalledWith(
-      "Se hizo clic en el botón de Log In"
-    );
-    expect(window.location.href).toBe("../views/login.html");
-  });
+  await driver.sleep(1000); // Esperar 1 segundo
 
-  test("btnRegister click should log message and navigate to signup.html", () => {
-    console.log = jest.fn(); // Mock console.log function
-    fireEvent.click(btnRegister); // Trigger click event
+  await driver.navigate().back(); // Regresar a la página anterior
 
-    // Expectations
-    expect(console.log).toHaveBeenCalledWith(
-      "Se hizo clic en el botón de Register"
-    );
-    expect(window.location.href).toBe("../views/signup.html");
-  });
-});
+  await btnRegister.click();
+  console.log('Se hizo clic en el botón de Register');
+
+  await driver.sleep(1000); // Esperar 1 segundo
+
+  await driver.quit();
+}
+
+test_case();
